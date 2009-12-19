@@ -1,8 +1,8 @@
 __all__ = ['triedict']
 
 #TODO:
-# - google code project
-# - docs
+# - docs, comments
+# - bitbucket project
 # - profiling/optimization (? merge iterkeys/iteritems)
 
 from copy import copy
