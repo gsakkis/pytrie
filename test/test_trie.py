@@ -1,47 +1,33 @@
 import unittest
-from trie import Trie
+from trie import SortedTrie
 
 
 class TestTrie(unittest.TestCase):
     def setUp(self):
         self.words = 'an ant all allot alloy aloe are ate be'.split()
-        self.trie = Trie(zip(self.words, range(len(self.words))))
+        self.trie = SortedTrie(zip(self.words, range(len(self.words))))
 
-    def test_prefix(self):
-        self.assertEqual(self.trie.prefix('antonym'), 'ant')
-        self.assertEqual(self.trie.prefix('are'), 'are')
-        self.assertRaises(KeyError, self.trie.prefix, 'alumni')
-        self.assertEqual(self.trie.prefix('alumni', strict=False), 'al')
-        self.assertEqual(self.trie.prefix('linux', strict=False), '')
+    def test_iterprefixeditems(self):
+        self.assertEqual(list(self.trie.iterprefixeditems('antonym')),
+                         [('an', 0), ('ant', 1)])
+        self.assertEqual(list(self.trie.iterprefixeditems('are')),
+                         [('are', 6)])
+        self.assertEqual(list(self.trie.iterprefixeditems('alumni')), [])
 
-    def test_prefixed_value(self):
-        self.assertEqual(self.trie.prefixed_value('antonym'), 1)
-        self.assertEqual(self.trie.prefixed_value('are'), 6)
-        self.assertRaises(KeyError, self.trie.prefixed_value, 'alumni')
-        self.assertEqual(self.trie.prefixed_value('alumni', default=None), None)
-        self.assertEqual(self.trie.prefixed_value('linux', default=-1), -1)
-
-    def test_prefix_value_pair(self):
-        self.assertEqual(self.trie.prefix_value_pair('antonym'), ('ant', 1))
-        self.assertEqual(self.trie.prefix_value_pair('are'), ('are', 6))
-        self.assertRaises(KeyError, self.trie.prefix_value_pair, 'alumni')
-        self.assertEqual(self.trie.prefix_value_pair('alumni', default=None), ('al', None))
-        self.assertEqual(self.trie.prefix_value_pair('linux', default=-1), ('',-1))
-
-    def test_iterkeys_prefix(self):
-        self.assertEqual(set(self.trie.iterkeys('al')),
-                         set(['all','allot','alloy','aloe']))
+    def test_iterkeys_wprefix(self):
+        self.assertEqual(list(self.trie.iterkeys('al')),
+                         ['all','allot','alloy','aloe'])
         self.assertEqual(list(self.trie.iterkeys('are')), ['are'])
         self.assertEqual(list(self.trie.iterkeys('ann')), [])
 
-    def test_itervalues_prefix(self):
-        self.assertEqual(set(self.trie.itervalues('al')), set([2,3,4,5]))
+    def test_itervalues_wprefix(self):
+        self.assertEqual(list(self.trie.itervalues('al')), [2,3,4,5])
         self.assertEqual(list(self.trie.itervalues('are')), [6])
         self.assertEqual(list(self.trie.itervalues('ann')), [])
 
-    def test_iteritems_prefix(self):
-        self.assertEqual(set(self.trie.iteritems('al')),
-                         set([('all',2),('allot',3),('alloy',4),('aloe',5)]))
+    def test_iteritems_wprefix(self):
+        self.assertEqual(list(self.trie.iteritems('al')),
+                         [('all',2),('allot',3),('alloy',4),('aloe',5)])
         self.assertEqual(list(self.trie.iteritems('are')), [('are',6)])
         self.assertEqual(list(self.trie.iteritems('ann')), [])
 
