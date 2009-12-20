@@ -2,7 +2,7 @@ import unittest
 from trie import Trie
 
 
-class TrieTests(unittest.TestCase):
+class TestTrie(unittest.TestCase):
     def setUp(self):
         self.words = 'an ant all allot alloy aloe are ate be'.split()
         self.trie = Trie(zip(self.words, range(len(self.words))))
@@ -56,8 +56,8 @@ class TrieTests(unittest.TestCase):
         for proto in xrange(HIGHEST_PROTOCOL):
             unpickled = loads(dumps(self.trie, proto))
             self.assertEqual(self.trie, unpickled)
-            self.assertTrue(type(self.trie) is type(unpickled))
-            self.assertFalse(self.trie is unpickled)
+            self.assert_(type(self.trie) is type(unpickled))
+            self.assert_(self.trie is not unpickled)
 
 
 if __name__ == "__main__":    
