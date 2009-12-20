@@ -1,11 +1,11 @@
 import unittest
-from trie import triedict
+from trie import Trie
 
 
-class TriedictTests(unittest.TestCase):
+class TrieTests(unittest.TestCase):
     def setUp(self):
         self.words = 'an ant all allot alloy aloe are ate be'.split()
-        self.trie = triedict(zip(self.words, range(len(self.words))))
+        self.trie = Trie(zip(self.words, range(len(self.words))))
 
     def test_prefix(self):
         self.assertEqual(self.trie.prefix('antonym'), 'ant')

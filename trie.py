@@ -1,9 +1,9 @@
-__all__ = ['triedict']
+__all__ = ['Trie']
 
 #TODO:
 # - docs, comments
 # - bitbucket project
-# - profiling/optimization (? merge iterkeys/iteritems)
+# - profiling/optimization
 
 from copy import copy
 from UserDict import DictMixin
@@ -12,7 +12,7 @@ from UserDict import DictMixin
 class EMPTY(object): pass
 
 
-class TrieNode(dict):
+class _Node(dict):
     __slots__ = ('value',)
 
     def __init__(self, value=EMPTY):
@@ -23,7 +23,7 @@ class TrieNode(dict):
                  sum(child.size(internal) for child in self.itervalues()))
 
     def __eq__(self, other):
-        return self.value == other.value and super(TrieNode,self).__eq__(other)
+        return self.value == other.value and super(_Node,self).__eq__(other)
 
     def __repr__(self):
         return '(%s, {%s})' % (
@@ -44,13 +44,13 @@ class TrieNode(dict):
         self.update(state[1])
 
 
-class triedict(DictMixin, object):
+class Trie(DictMixin, object):
 
-    key_factory = ''.join
-    _TrieNode = TrieNode
+    KeyFactory = ''.join
+    _NodeFactory = _Node
 
     def __init__(self, seq=None, **kwargs):
-        self._root = self._TrieNode()
+        self._root = self._NodeFactory()
         self.update(seq, **kwargs)
 
     def prefix(self, key, strict=True):
@@ -114,11 +114,11 @@ class triedict(DictMixin, object):
 
     def __setitem__(self, key, value):
         node = self._root
-        TrieNode = self._TrieNode
+        Node = self._NodeFactory
         for part in key:
             next = node.get(part)
             if next is None:
-                node = node.setdefault(part, TrieNode())
+                node = node.setdefault(part, Node())
             else:
                 node = next
         node.value = value
@@ -134,7 +134,7 @@ class triedict(DictMixin, object):
             raise KeyError
         node.value = EMPTY
         pop = nodes_parts.pop
-        while node.value is EMPTY and not node and nodes_parts:
+        while node.value is EMPTY and len(node)==0 and nodes_parts:
             node,part = pop()
             del node[part]
 
@@ -151,25 +151,7 @@ class triedict(DictMixin, object):
         return list(self.iteritems(prefix))
 
     def iterkeys(self, prefix=None):
-        parts = []; append = parts.append
-        def generator(node, key_factory=self.key_factory, parts=parts,
-                      append=append, EMPTY=EMPTY):
-            if node.value is not EMPTY:
-                yield key_factory(parts)
-            for part,child in node.iteritems():
-                append(part)
-                for subresult in generator(child):
-                    yield subresult
-                del parts[-1]
-        node = self._root
-        if prefix is not None:
-            for part in prefix:
-                append(part)
-                node = node.get(part)
-                if node is None:
-                    node = self._TrieNode()
-                    break
-        return generator(node)
+        return (key for key,value in self.iteritems(prefix))
 
     def itervalues(self, prefix=None):
         def generator(node, EMPTY=EMPTY):
@@ -183,12 +165,12 @@ class triedict(DictMixin, object):
         else:
             node = self._find(prefix)
             if node is None:
-                node = self._TrieNode()
+                node = self._NodeFactory()
         return generator(node)
 
     def iteritems(self, prefix=None):
         parts = []; append = parts.append
-        def generator(node, key_factory=self.key_factory, parts=parts,
+        def generator(node, key_factory=self.KeyFactory, parts=parts,
                       append=append, EMPTY=EMPTY):
             if node.value is not EMPTY:
                 yield (key_factory(parts), node.value)
@@ -203,7 +185,7 @@ class triedict(DictMixin, object):
                 append(part)
                 node = node.get(part)
                 if node is None:
-                    node = self._TrieNode()
+                    node = self._NodeFactory()
                     break
         return generator(node)
 
@@ -214,7 +196,7 @@ class triedict(DictMixin, object):
         return self.copy()
 
     def copy(self):
-        clone = copy(super(triedict,self))
+        clone = copy(super(Trie,self))
         clone._root = copy(self._root)
         return clone
 
@@ -222,7 +204,7 @@ class triedict(DictMixin, object):
     def fromkeys(cls, iterable, value=None, key_factory=None):
         d = cls()
         if key_factory is not None:
-            d.key_factory = key_factory
+            d.KeyFactory = key_factory
         for key in iterable: d[key] = value
         return d
 

@@ -3,11 +3,11 @@ import unittest
 from UserDict import UserDict
 from test.mapping_tests import TestMappingProtocol, BasicTestMappingProtocol
 
-from trie import triedict
+from trie import Trie
 
 
 class GeneralMappingTests(TestMappingProtocol):
-    type2test = triedict
+    type2test = Trie
 
     def _empty_mapping(self, **kwds):
         """Return an empty mapping object"""
@@ -235,12 +235,12 @@ class GeneralMappingTests(TestMappingProtocol):
             def __eq__(self, other):
                 raise Exc()
 
-        class TupleTrieDict(self.type2test):
-            key_factory = tuple
+        class TupleTrie(self.type2test):
+            KeyFactory = tuple
 
-        d1 = TupleTrieDict()
+        d1 = TupleTrie()
         d1[[1,BadCmp()]] = 3
-        d2 = TupleTrieDict()
+        d2 = TupleTrie()
         d2[1,2] = 3
         try:
             d1 < d2
@@ -263,7 +263,7 @@ class GeneralMappingTests(TestMappingProtocol):
 
 
 class SubclassMappingTests(GeneralMappingTests):
-    class type2test(triedict):
+    class type2test(Trie):
         pass
 
 
