@@ -9,13 +9,13 @@ import unittest
 import UserDict
 from test import mapping_tests
 
-from trie import Trie
+from pytrie import StringTrie
 
 
 class BasicTestMappingTrie(mapping_tests.BasicTestMappingProtocol):
     # Functions that can be useful to override to adapt to dictionary
     # semantics
-    type2test = Trie    # which class is being tested (overwrite in subclasses)
+    type2test = StringTrie  # which class is being tested (overwrite in subclasses)
 
     def _reference(self):
         """Return a dictionary of values which are invariant by storage
@@ -164,7 +164,7 @@ class TestMappingTrie(BasicTestMappingTrie, mapping_tests.TestMappingProtocol):
     
 
 class TestMappingTrieSubclass(TestMappingTrie):
-    class type2test(Trie):
+    class type2test(StringTrie):
         pass
 
 
