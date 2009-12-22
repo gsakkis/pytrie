@@ -1,3 +1,2 @@
 include LICENSE MANIFEST.in
-include docs/*
-prune */.svn
+recursive-include docs *
