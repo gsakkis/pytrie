@@ -1,7 +1,7 @@
 ''':mod:`pytrie` is a pure Python implementation of the
 `trie <http://en.wikipedia.org/wiki/Trie>`_ (prefix tree) data structure.
 
-A *trie* is an tree data structure that is used to store a mapping where the keys
+A *trie* is a tree data structure that is used to store a mapping where the keys
 are sequences, usually strings over an alphabet. In addition to implementing the
 mapping interface, tries facilitate finding the items for a given prefix, and
 vice versa, finding the items whose keys are prefixes of a given key ``K``. As a
@@ -17,7 +17,7 @@ Usage
 >>> from pytrie import SortedStringTrie as trie
 >>> t = trie(an=0, ant=1, all=2, allot=3, alloy=4, aloe=5, are=6, be=7)
 >>> t
-{'all': 2, 'allot': 3, 'alloy': 4, 'aloe': 5, 'an': 0, 'ant': 1, 'are': 6, 'be': 7}
+SortedStringTrie({'all': 2, 'allot': 3, 'alloy': 4, 'aloe': 5, 'an': 0, 'ant': 1, 'are': 6, 'be': 7})
 >>> t.keys(prefix='al')
 ['all', 'allot', 'alloy', 'aloe']
 >>> t.items(prefix='an')
@@ -368,7 +368,9 @@ class Trie(DictMixin, object):
         return clone
 
     def __repr__(self):
-        return '{%s}' % (', '.join('%r: %r' % t for t in self.iteritems()))
+        return '%s({%s})' % (
+            self.__class__.__name__,
+            ', '.join('%r: %r' % t for t in self.iteritems()))
 
     def _find(self, key):
         node = self._root

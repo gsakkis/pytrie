@@ -74,6 +74,10 @@ class TestTrie(unittest.TestCase):
             self.assert_(type(self.trie) is type(unpickled))
             self.assert_(self.trie is not unpickled)
 
+    def test_repr(self):
+        evaled = eval(repr(self.trie))
+        self.assertEqual(evaled, self.trie)
+        self.assertEqual(evaled.__class__, self.trie.__class__)
 
 if __name__ == "__main__":    
     unittest.main()
