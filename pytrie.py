@@ -152,14 +152,17 @@ class Trie(DictMixin, object):
           - if ``default`` is given, return it
           - otherwise raise ``KeyError``
         '''
-        node = self._root
+        current = self._root
+        longest_prefix_value = NULL
         for part in key:
-            next = node.children.get(part)
-            if next is None:
+            current = current.children.get(part)
+            if current is None:
                 break
-            node = next
-        if node.value is not NULL:
-            return node.value
+            value = current.value
+            if value is not NULL:
+                longest_prefix_value = value
+        if longest_prefix_value is not NULL:
+            return longest_prefix_value
         elif default is not NULL:
             return default
         else:
@@ -173,17 +176,23 @@ class Trie(DictMixin, object):
           - if ``default`` is given, return it
           - otherwise raise ``KeyError``
         '''
-        prefix = [];
+        prefix = []
         append = prefix.append
-        node = self._root
-        for part in key:
-            next = node.children.get(part)
-            if next is None:
+        current = self._root
+        longest_prefix_value = NULL
+        max_non_null_index = -1
+        for i, part in enumerate(key):
+            current = current.children.get(part)
+            if current is None:
                 break
             append(part)
-            node = next
-        if node.value is not NULL:
-            return (self.KeyFactory(prefix), node.value)
+            value = current.value
+            if value is not NULL:
+                longest_prefix_value = value
+                max_non_null_index = i
+        if longest_prefix_value is not NULL:
+            del prefix[max_non_null_index+1:]
+            return (self.KeyFactory(prefix), longest_prefix_value)
         elif default is not NULL:
             return default
         else:

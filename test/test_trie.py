@@ -10,6 +10,8 @@ class TestTrie(unittest.TestCase):
     def test_longest_prefix(self):
         self.assertEqual(self.trie.longest_prefix('antonym'), 'ant')
         self.assertEqual(self.trie.longest_prefix('are'), 'are')
+        self.assertEqual(self.trie.longest_prefix('alla'), 'all')
+        self.assertEqual(self.trie.longest_prefix('allo'), 'all')
         self.assertRaises(KeyError, self.trie.longest_prefix_item, 'alumni')
         self.assertEqual(self.trie.longest_prefix('alumni', default=None), None)
         self.assertEqual(self.trie.longest_prefix('linux', default=-1), -1)
@@ -17,6 +19,8 @@ class TestTrie(unittest.TestCase):
     def test_longest_prefix_value(self):
         self.assertEqual(self.trie.longest_prefix_value('antonym'), 1)
         self.assertEqual(self.trie.longest_prefix_value('are'), 6)
+        self.assertEqual(self.trie.longest_prefix_value('alla'), 2)
+        self.assertEqual(self.trie.longest_prefix_value('allo'), 2)
         self.assertRaises(KeyError, self.trie.longest_prefix_value, 'alumni')
         self.assertEqual(self.trie.longest_prefix_value('alumni', default=None), None)
         self.assertEqual(self.trie.longest_prefix_value('linux', default=-1), -1)
@@ -24,6 +28,8 @@ class TestTrie(unittest.TestCase):
     def test_longest_prefix_item(self):
         self.assertEqual(self.trie.longest_prefix_item('antonym'), ('ant', 1))
         self.assertEqual(self.trie.longest_prefix_item('are'), ('are', 6))
+        self.assertEqual(self.trie.longest_prefix_item('alla'), ('all', 2))
+        self.assertEqual(self.trie.longest_prefix_item('allo'), ('all', 2))
         self.assertRaises(KeyError, self.trie.longest_prefix_item, 'alumni')
         self.assertEqual(self.trie.longest_prefix_item('alumni', default=None), None)
         self.assertEqual(self.trie.longest_prefix_item('linux', default=-1), -1)
