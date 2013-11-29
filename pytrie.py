@@ -56,23 +56,23 @@ class NULL(object): pass
 
 class Node(object):
     '''Trie node class.
-    
+
     Subclasses may extend it to replace :attr:`ChildrenFactory` with a different
     mapping class (e.g. `sorteddict <http://pypi.python.org/pypi/sorteddict/>`_).
-    
+
     :ivar value: The value of the key corresponding to this node or :const:`NULL`
-        if there is no such key.    
+        if there is no such key.
     :ivar children: A ``{key-part : child-node}`` mapping.
     '''
     __slots__ = ('value', 'children')
-    
+
     #: A callable for creating a new :attr:`children` mapping.
     ChildrenFactory = dict
 
     def __init__(self, value=NULL):
         self.value = value
         self.children = self.ChildrenFactory()
-    
+
     def numkeys(self):
         '''Return the number of keys in the subtree rooted at this node.'''
         return ((self.value is not NULL) +
@@ -96,32 +96,32 @@ class Node(object):
     def __setstate__(self, state):
         self.value, self.children = state
 
-    
+
 class Trie(DictMixin, object):
     '''Base trie class.
-        
+
     As with regular dicts, keys are not necessarily returned sorted. Use
     :class:`SortedTrie` if sorting is required.
     '''
 
     #: Callable for forming a key from its parts.
     KeyFactory = tuple
-    
+
     #: Callable for creating new trie nodes.
     NodeFactory = Node
 
     def __init__(self, seq=None, **kwargs):
         '''Create a new trie.
-        
+
         Parameters are the same with ``dict()``.
         '''
         self._root = self.NodeFactory()
         self.update(seq, **kwargs)
-    
+
     @classmethod
     def fromkeys(cls, iterable, value=None):
         '''Create a new trie with keys from ``iterable`` and values set to ``value``.
-        
+
         Parameters are the same with ``dict.fromkeys()``.
         '''
         d = cls()
@@ -133,8 +133,8 @@ class Trie(DictMixin, object):
 
     def longest_prefix(self, key, default=NULL):
         '''Return the longest key in this trie that is a prefix of ``key``.
-        
-        If the trie doesn't contain any prefix of ``key``:        
+
+        If the trie doesn't contain any prefix of ``key``:
           - if ``default`` is given, return it
           - otherwise raise ``KeyError``
         '''
@@ -147,8 +147,8 @@ class Trie(DictMixin, object):
     def longest_prefix_value(self, key, default=NULL):
         '''Return the value associated with the longest key in this trie that is
         a prefix of ``key``.
-        
-        If the trie doesn't contain any prefix of ``key``:        
+
+        If the trie doesn't contain any prefix of ``key``:
           - if ``default`` is given, return it
           - otherwise raise ``KeyError``
         '''
@@ -167,12 +167,12 @@ class Trie(DictMixin, object):
             return default
         else:
             raise KeyError
-    
+
     def longest_prefix_item(self, key, default=NULL):
         '''Return the item (``(key,value)`` tuple) associated with the longest
         key in this trie that is a prefix of ``key``.
-        
-        If the trie doesn't contain any prefix of ``key``:        
+
+        If the trie doesn't contain any prefix of ``key``:
           - if ``default`` is given, return it
           - otherwise raise ``KeyError``
         '''
@@ -225,7 +225,7 @@ class Trie(DictMixin, object):
                 yield node.value
 
     def iter_prefix_items(self, key):
-        '''Return an iterator over the items (``(key,value)`` tuples) of this 
+        '''Return an iterator over the items (``(key,value)`` tuples) of this
         trie that are associated with keys that are prefixes of ``key``.
         '''
         key_factory = self.KeyFactory
@@ -239,19 +239,19 @@ class Trie(DictMixin, object):
             append(part)
             if node.value is not NULL:
                 yield (key_factory(prefix), node.value)
-    
+
     #----- extended mapping API methods ----------------------------------------
-    
+
     def keys(self, prefix=None):
         '''Return a list of this trie's keys.
-        
+
         :param prefix: If not None, return only the keys prefixed by ``prefix``.
         '''
         return list(self.iterkeys(prefix))
 
     def values(self, prefix=None):
         '''Return a list of this trie's values.
-        
+
         :param prefix: If not None, return only the values associated with keys
             prefixed by ``prefix``.
         '''
@@ -259,7 +259,7 @@ class Trie(DictMixin, object):
 
     def items(self, prefix=None):
         '''Return a list of this trie's items (``(key,value)`` tuples).
-        
+
         :param prefix: If not None, return only the items associated with keys
             prefixed by ``prefix``.
         '''
@@ -267,14 +267,14 @@ class Trie(DictMixin, object):
 
     def iterkeys(self, prefix=None):
         '''Return an iterator over this trie's keys.
-        
+
         :param prefix: If not None, yield only the keys prefixed by ``prefix``.
         '''
         return (key for key,value in self.iteritems(prefix))
 
     def itervalues(self, prefix=None):
         '''Return an iterator over this trie's values.
-        
+
         :param prefix: If not None, yield only the values associated with keys
             prefixed by ``prefix``.
         '''
@@ -294,7 +294,7 @@ class Trie(DictMixin, object):
 
     def iteritems(self, prefix=None):
         '''Return an iterator over this trie's items (``(key,value)`` tuples).
-        
+
         :param prefix: If not None, yield only the items associated with keys
             prefixed by ``prefix``.
         '''
@@ -320,7 +320,7 @@ class Trie(DictMixin, object):
         return generator(node)
 
     #----- original mapping API methods ----------------------------------------
-    
+
     def __len__(self):
         return self._root.numkeys()
 
@@ -408,7 +408,7 @@ class _SortedNode(Node):
 
 class SortedTrie(Trie):
     '''A :class:`Trie` that returns its keys (and associated values/items) sorted.
-    
+
     .. note::
         This implementation does not keep the keys sorted internally; instead it
         sorts them every time a method returning a list or iterator (e.g.
@@ -416,7 +416,7 @@ class SortedTrie(Trie):
         (few inserts/deletes) and is iterated often, it is probably more efficient
         to use a :attr:`NodeFactory` based on a sorted dict such as
         `sorteddict <http://pypi.python.org/pypi/sorteddict/>`_.
-    '''    
+    '''
     NodeFactory = _SortedNode
 
 
