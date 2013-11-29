@@ -69,12 +69,14 @@ class TestTrie(unittest.TestCase):
     def test_consistency_wprefix(self):
         t = self.trie
         for prefix in 'al','are','ann':
-            self.assertEqual(t.items(prefix),
-                             zip(t.keys(prefix), t.values(prefix)))
+            self.assertEqual(
+                t.items(prefix),
+                list(zip(t.keys(prefix), t.values(prefix)))
+            )
 
     def test_pickle(self):
         from pickle import dumps, loads, HIGHEST_PROTOCOL
-        for proto in xrange(HIGHEST_PROTOCOL):
+        for proto in range(HIGHEST_PROTOCOL):
             unpickled = loads(dumps(self.trie, proto))
             self.assertEqual(self.trie, unpickled)
             self.assert_(type(self.trie) is type(unpickled))
@@ -85,5 +87,5 @@ class TestTrie(unittest.TestCase):
         self.assertEqual(evaled, self.trie)
         self.assertEqual(evaled.__class__, self.trie.__class__)
 
-if __name__ == "__main__":    
+if __name__ == "__main__":
     unittest.main()

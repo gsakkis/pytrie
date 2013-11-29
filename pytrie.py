@@ -48,7 +48,7 @@ __all__ = ['Trie', 'StringTrie', 'SortedTrie', 'SortedStringTrie', 'Node']
 
 from copy import copy
 from operator import itemgetter
-from UserDict import DictMixin
+from collections import MutableMapping
 
 # Singleton sentinel - works with pickling
 class NULL(object): pass
@@ -75,8 +75,10 @@ class Node(object):
 
     def numkeys(self):
         '''Return the number of keys in the subtree rooted at this node.'''
-        return ((self.value is not NULL) +
-                 sum(child.numkeys() for child in self.children.itervalues()))
+        return (
+            (1 if self.value is not NULL else 0) +
+            sum(child.numkeys() for child in self.children.values())
+        )
 
     def __repr__(self):
         return '(%s, {%s})' % (
@@ -86,7 +88,11 @@ class Node(object):
     def __copy__(self):
         clone = self.__class__(self.value)
         clone_children = clone.children
-        for key,child in self.children.iteritems():
+        try:
+            items = self.children.iteritems()
+        except AttributeError:
+            items = self.children.items()
+        for key, child in items:
             clone_children[key] = child.__copy__()
         return clone
 
@@ -97,7 +103,7 @@ class Node(object):
         self.value, self.children = state
 
 
-class Trie(DictMixin, object):
+class Trie(MutableMapping):
     '''Base trie class.
 
     As with regular dicts, keys are not necessarily returned sorted. Use
@@ -110,13 +116,14 @@ class Trie(DictMixin, object):
     #: Callable for creating new trie nodes.
     NodeFactory = Node
 
-    def __init__(self, seq=None, **kwargs):
+    def __init__(self, *args, **kwargs):
         '''Create a new trie.
 
         Parameters are the same with ``dict()``.
         '''
         self._root = self.NodeFactory()
-        self.update(seq, **kwargs)
+
+        self.update(*args, **kwargs)
 
     @classmethod
     def fromkeys(cls, iterable, value=None):
@@ -281,7 +288,11 @@ class Trie(DictMixin, object):
         def generator(node, NULL=NULL):
             if node.value is not NULL:
                 yield node.value
-            for part,child in node.children.iteritems():
+            try:
+                items = node.children.iteritems()
+            except AttributeError:
+                items = node.children.items()
+            for part, child in items:
                 for subresult in generator(child):
                     yield subresult
         if prefix is None:
@@ -304,7 +315,11 @@ class Trie(DictMixin, object):
                       append=append, NULL=NULL):
             if node.value is not NULL:
                 yield (key_factory(parts), node.value)
-            for part,child in node.children.iteritems():
+            try:
+                items = node.children.iteritems()
+            except AttributeError:
+                items = node.children.items()
+            for part, child in items:
                 append(part)
                 for subresult in generator(child):
                     yield subresult
@@ -399,7 +414,12 @@ class StringTrie(Trie):
 # However this is implementation detail that may change in the future
 class _SortedDict(dict):
     def iteritems(self):
-        return sorted(dict.iteritems(self), key=itemgetter(0))
+        try:
+            items = dict.iteritems(self)
+        except AttributeError:
+            items = dict.items(self)
+
+        return sorted(items, key=itemgetter(0))
 
 
 class _SortedNode(Node):
@@ -420,7 +440,7 @@ class SortedTrie(Trie):
     NodeFactory = _SortedNode
 
 
-class SortedStringTrie(SortedTrie,StringTrie):
+class SortedStringTrie(SortedTrie, StringTrie):
     'A :class:`Trie` that is both a :class:`StringTrie` and a :class:`SortedTrie`.'
 
 
