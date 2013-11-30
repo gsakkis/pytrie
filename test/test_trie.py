@@ -79,8 +79,8 @@ class TestTrie(unittest.TestCase):
         for proto in range(HIGHEST_PROTOCOL):
             unpickled = loads(dumps(self.trie, proto))
             self.assertEqual(self.trie, unpickled)
-            self.assert_(type(self.trie) is type(unpickled))
-            self.assert_(self.trie is not unpickled)
+            self.assertTrue(type(self.trie) is type(unpickled))
+            self.assertTrue(self.trie is not unpickled)
 
     def test_repr(self):
         evaled = eval(repr(self.trie))
