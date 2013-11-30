@@ -6,7 +6,10 @@ plus a few more extra tests.
 
 import sys
 import unittest
-from collections import MutableMapping
+try:
+    from UserDict import UserDict
+except ImportError: # Python 3
+    from collections import UserDict
 from test import mapping_tests
 
 from pytrie import StringTrie
@@ -112,12 +115,11 @@ class TestMappingTrie(BasicTestMappingTrie, mapping_tests.TestMappingProtocol):
         self.assert_(dictlike().fromkeys("a").__class__ is dictlike)
         self.assert_(type(dictlike.fromkeys("a")) is dictlike)
         class mydict(self.type2test):
-            pass
-            # def __new__(cls):
-                # return MutableMapping()
+            def __new__(cls):
+                return UserDict()
         ud = mydict.fromkeys("ab")
         self.assertEqual(ud, {"a":None, "b":None})
-        self.assert_(isinstance(ud, MutableMapping))
+        self.assert_(isinstance(ud, UserDict))
         self.assertRaises(TypeError, dict.fromkeys)
 
         class Exc(Exception): pass

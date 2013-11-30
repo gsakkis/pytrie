@@ -42,16 +42,28 @@ KeyError
 
 __all__ = ['Trie', 'StringTrie', 'SortedTrie', 'SortedStringTrie', 'Node']
 
-#TODO:
-# - bitbucket project + ANN
-# - (0.2 benchmarks/profiling/optimization)
-
+import sys
 from copy import copy
 from operator import itemgetter
 from collections import MutableMapping
 
+# Python 3 interoperability
+PY3 = sys.version_info[0] == 3
+if PY3:
+    def itervalues(d):
+        return d.values()
+    def iteritems(d):
+        return d.items()
+else:
+    def itervalues(d):
+        return d.itervalues()
+    def iteritems(d):
+        return d.iteritems()
+
+
 # Singleton sentinel - works with pickling
-class NULL(object): pass
+class NULL(object):
+    pass
 
 
 class Node(object):
@@ -75,24 +87,18 @@ class Node(object):
 
     def numkeys(self):
         '''Return the number of keys in the subtree rooted at this node.'''
-        return (
-            (1 if self.value is not NULL else 0) +
-            sum(child.numkeys() for child in self.children.values())
-        )
+        return (int(self.value is not NULL) +
+                sum(child.numkeys() for child in itervalues(self.children)))
 
     def __repr__(self):
         return '(%s, {%s})' % (
             self.value is NULL and 'NULL' or repr(self.value),
-            ', '.join('%r: %r' % t for t in self.children.iteritems()))
+            ', '.join('%r: %r' % t for t in iteritems(self.children)))
 
     def __copy__(self):
         clone = self.__class__(self.value)
         clone_children = clone.children
-        try:
-            items = self.children.iteritems()
-        except AttributeError:
-            items = self.children.items()
-        for key, child in items:
+        for key, child in iteritems(self.children):
             clone_children[key] = child.__copy__()
         return clone
 
@@ -288,11 +294,7 @@ class Trie(MutableMapping):
         def generator(node, NULL=NULL):
             if node.value is not NULL:
                 yield node.value
-            try:
-                items = node.children.iteritems()
-            except AttributeError:
-                items = node.children.items()
-            for part, child in items:
+            for part, child in iteritems(node.children):
                 for subresult in generator(child):
                     yield subresult
         if prefix is None:
@@ -315,11 +317,7 @@ class Trie(MutableMapping):
                       append=append, NULL=NULL):
             if node.value is not NULL:
                 yield (key_factory(parts), node.value)
-            try:
-                items = node.children.iteritems()
-            except AttributeError:
-                items = node.children.items()
-            for part, child in items:
+            for part, child in iteritems(node.children):
                 append(part)
                 for subresult in generator(child):
                     yield subresult
@@ -410,16 +408,16 @@ class StringTrie(Trie):
     KeyFactory = ''.join
 
 
-# XXX: quick & dirty sorted dict; currently only iteritems() has to be overriden.
-# However this is implementation detail that may change in the future
+# XXX: quick & dirty sorted dict
+# currently only iteritems() (for Python 2) or items() (for Python 3) has to be
+# overriden. However this is implementation detail that may change in the future
 class _SortedDict(dict):
-    def iteritems(self):
-        try:
-            items = dict.iteritems(self)
-        except AttributeError:
-            items = dict.items(self)
-
-        return sorted(items, key=itemgetter(0))
+    if PY3:
+        def items(self):
+            return iter(sorted(dict.items(self), key=itemgetter(0)))
+    else:
+        def iteritems(self):
+            return iter(sorted(dict.iteritems(self), key=itemgetter(0)))
 
 
 class _SortedNode(Node):
