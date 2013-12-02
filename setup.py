@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name            = 'PyTrie',
-    version         = '0.1',
+    version         = '0.2',
     author          = 'George Sakkis',
     author_email    = 'george.sakkis@gmail.com',
     url             = 'http://bitbucket.org/gsakkis/pytrie/',
@@ -20,7 +20,8 @@ prefix, and vice versa, finding the items whose keys are prefixes of a given key
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
-        'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 3',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     py_modules      = ['pytrie'],
