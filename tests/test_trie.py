@@ -73,11 +73,11 @@ class TestTrie(unittest.TestCase):
         self.assertEqual(self.trie.items('ann'), [])
 
     def test_consistency_wprefix(self):
-        t = self.trie
+        trie = self.trie
         for prefix in 'al', 'are', 'ann':
             self.assertEqual(
-                t.items(prefix),
-                list(zip(t.keys(prefix), t.values(prefix)))
+                trie.items(prefix),
+                list(zip(trie.keys(prefix), trie.values(prefix)))
             )
 
     def test_empty_string(self):

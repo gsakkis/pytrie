@@ -52,16 +52,16 @@ import sortedcontainers
 # Python 3 interoperability
 PY3 = sys.version_info[0] == 3
 if PY3:
-    def itervalues(d):
+    def itervalues(d):  # pylint: disable=invalid-name
         return d.values()
 
-    def iteritems(d):
+    def iteritems(d):  # pylint: disable=invalid-name
         return d.items()
 else:
-    def itervalues(d):
+    def itervalues(d):  # pylint: disable=invalid-name
         return d.itervalues()
 
-    def iteritems(d):
+    def iteritems(d):  # pylint: disable=invalid-name
         return d.iteritems()
 
 
@@ -143,10 +143,10 @@ class Trie(MutableMapping):
 
         Parameters are the same with ``dict.fromkeys()``.
         """
-        d = cls()
+        trie = cls()
         for key in iterable:
-            d[key] = value
-        return d
+            trie[key] = value
+        return trie
 
     #----- trie-specific methods -----------------------------------------------
 
@@ -271,6 +271,8 @@ class Trie(MutableMapping):
 
     #----- extended mapping API methods ----------------------------------------
 
+     # pylint: disable=arguments-differ
+
     def keys(self, prefix=None):
         """Return a list of this trie's keys.
 
@@ -330,6 +332,7 @@ class Trie(MutableMapping):
         parts = []
         append = parts.append
 
+        # pylint: disable=dangerous-default-value
         def generator(node, key_factory=self.KeyFactory, parts=parts,
                       append=append, null=NULL):
             if node.value is not null:
@@ -350,6 +353,8 @@ class Trie(MutableMapping):
                     break
 
         return generator(root)
+
+     # pylint: enable=arguments-differ
 
     #----- original mapping API methods ----------------------------------------
 
@@ -412,7 +417,7 @@ class Trie(MutableMapping):
 
     def copy(self):
         clone = copy(super(Trie, self))
-        clone._root = copy(self._root)
+        clone._root = copy(self._root)  # pylint: disable=protected-access
         return clone
 
     def __repr__(self):
@@ -456,6 +461,7 @@ class SortedTrie(Trie):
     NodeFactory = _SortedNode
 
 
+# pylint: disable=too-many-ancestors
 class SortedStringTrie(SortedTrie, StringTrie):
     """
     A :class:`Trie` that is both a :class:`StringTrie` and a :class:`SortedTrie`

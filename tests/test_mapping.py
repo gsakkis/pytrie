@@ -8,12 +8,15 @@ plus a few more extra tests.
 
 try:
     from UserDict import UserDict
-except ImportError: # Python 3
+except ImportError:  # Python 3
+    # pylint: disable=no-name-in-module
     from collections import UserDict
 from test import mapping_tests
 
 from pytrie import StringTrie
 
+
+# pylint: disable=invalid-name
 
 class BasicTestMappingTrie(mapping_tests.BasicTestMappingProtocol):
     # Functions that can be useful to override to adapt to dictionary
@@ -91,7 +94,7 @@ class TestMappingTrie(BasicTestMappingTrie, mapping_tests.TestMappingProtocol):
         d.update(self._full_mapping({'1': 2, '3': 4, '5': 6}).iteritems())
         self.assertEqual(d, {'1': 2, '2': 4, '3': 4, '5': 6})
 
-        class SimpleUserDict:
+        class SimpleUserDict:  # pylint: disable=old-style-class
             def __init__(self):
                 self.d = {'1': 1, '2': 2, '3': 3}
 
@@ -142,7 +145,7 @@ class TestMappingTrie(BasicTestMappingTrie, mapping_tests.TestMappingProtocol):
             pass
 
         class baddict1(self.type2test):
-            def __init__(self):
+            def __init__(self):  # pylint: disable=super-init-not-called
                 raise Exc()
 
         self.assertRaises(Exc, baddict1.fromkeys, [1])
@@ -152,7 +155,7 @@ class TestMappingTrie(BasicTestMappingTrie, mapping_tests.TestMappingProtocol):
             def __iter__(self):
                 return self
 
-            def next(self):
+            def next(self):  # pylint: disable=no-self-use
                 raise Exc()
 
         self.assertRaises(Exception, self.type2test.fromkeys, BadSeq())
