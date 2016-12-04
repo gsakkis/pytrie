@@ -1,3 +1,7 @@
 .idea/
 *.pyc
 PyTrie.egg-info/
+.eggs/
+*.egg
+build/
+dist/

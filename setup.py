@@ -4,16 +4,12 @@ from setuptools import setup
 
 setup(
     name='PyTrie',
-    version='0.2',
+    version='0.3',
     author='George Sakkis',
     author_email='george.sakkis@gmail.com',
-    url='http://bitbucket.org/gsakkis/pytrie/',
+    url='https://github.com/gsakkis/pytrie/',
     description='A pure Python implementation of the trie data structure.',
-    long_description='''A *trie* is an ordered tree data structure that is used
-    to store a mapping where the keys are sequences, usually strings over an
-    alphabet. In addition to implementing the mapping interface, tries allow
-    finding the items for a given prefix, and vice versa, finding the items
-    whose keys are prefixes of a given key.''',
+    long_description=open('README.md').read(),
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
