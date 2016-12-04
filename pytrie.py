@@ -394,6 +394,9 @@ class Trie(MutableMapping):
             self.__class__.__name__,
             ', '.join('%r: %r' % t for t in self.iteritems()))
 
+    def __cmp__(self, other):
+        return cmp(self.items(), other.items())
+
     def _find(self, key):
         node = self._root
         for part in key:
