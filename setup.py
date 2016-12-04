@@ -24,5 +24,6 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     py_modules=['pytrie'],
+    install_requires=['sortedcontainers'],
     test_suite='tests',
 )

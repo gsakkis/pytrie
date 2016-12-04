@@ -45,8 +45,9 @@ __all__ = ['Trie', 'StringTrie', 'SortedTrie', 'SortedStringTrie', 'Node']
 
 import sys
 from copy import copy
-from operator import itemgetter
 from collections import MutableMapping
+
+import sortedcontainers
 
 # Python 3 interoperability
 PY3 = sys.version_info[0] == 3
@@ -304,7 +305,7 @@ class Trie(MutableMapping):
         def generator(node, null=NULL):
             if node.value is not null:
                 yield node.value
-            for part, child in iteritems(node.children):
+            for child in itervalues(node.children):
                 for subresult in generator(child):
                     yield subresult
         if prefix is None:
@@ -424,20 +425,8 @@ class StringTrie(Trie):
     KeyFactory = ''.join
 
 
-# XXX: quick & dirty sorted dict
-# currently only iteritems() (for Python 2) or items() (for Python 3) has to be
-# overriden. However this is implementation detail that may change in the future
-class _SortedDict(dict):
-    if PY3:
-        def items(self):
-            return iter(sorted(dict.items(self), key=itemgetter(0)))
-    else:
-        def iteritems(self):
-            return iter(sorted(dict.iteritems(self), key=itemgetter(0)))
-
-
 class _SortedNode(Node):
-    ChildrenFactory = _SortedDict
+    ChildrenFactory = sortedcontainers.SortedDict
 
 
 class SortedTrie(Trie):
