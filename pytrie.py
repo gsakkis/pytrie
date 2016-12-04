@@ -351,6 +351,13 @@ class Trie(MutableMapping):
     def __len__(self):
         return self._root.numkeys()
 
+    def __nonzero__(self):
+        return self._root.value is not NULL or bool(self._root.children)
+
+    if PY3:
+        __bool__ = __nonzero__
+        del __nonzero__
+
     def __iter__(self):
         return self.iterkeys()
 
