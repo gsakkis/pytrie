@@ -109,7 +109,7 @@ class TestMappingTrie(BasicTestMappingTrie, mapping_tests.TestMappingProtocol):
         self.assertEqual(self.type2test.fromkeys('abc'),
                          {'a': None, 'b': None, 'c': None})
         d = self._empty_mapping()
-        self.assert_(not(d.fromkeys('abc') is d))
+        self.assertTrue(not(d.fromkeys('abc') is d))
         self.assertEqual(d.fromkeys('abc'), {'a': None, 'b': None, 'c': None})
         self.assertEqual(d.fromkeys(('4', '5'), 0), {'4': 0, '5': 0})
         self.assertEqual(d.fromkeys([]), {})
@@ -125,9 +125,9 @@ class TestMappingTrie(BasicTestMappingTrie, mapping_tests.TestMappingProtocol):
 
         self.assertEqual(dictlike.fromkeys('a'), {'a': None})
         self.assertEqual(dictlike().fromkeys('a'), {'a': None})
-        self.assert_(dictlike.fromkeys('a').__class__ is dictlike)
-        self.assert_(dictlike().fromkeys('a').__class__ is dictlike)
-        self.assert_(type(dictlike.fromkeys('a')) is dictlike)
+        self.assertTrue(dictlike.fromkeys('a').__class__ is dictlike)
+        self.assertTrue(dictlike().fromkeys('a').__class__ is dictlike)
+        self.assertTrue(type(dictlike.fromkeys('a')) is dictlike)
 
         class mydict(self.type2test):
             def __new__(cls):
@@ -135,7 +135,7 @@ class TestMappingTrie(BasicTestMappingTrie, mapping_tests.TestMappingProtocol):
 
         ud = mydict.fromkeys('ab')
         self.assertEqual(ud, {'a': None, 'b': None})
-        self.assert_(isinstance(ud, UserDict))
+        self.assertTrue(isinstance(ud, UserDict))
         self.assertRaises(TypeError, dict.fromkeys)
 
         class Exc(Exception):
@@ -183,7 +183,7 @@ class TestMappingTrie(BasicTestMappingTrie, mapping_tests.TestMappingProtocol):
 
         d = self._empty_mapping()
         self.assertEqual(d.copy(), d)
-        self.assert_(isinstance(d.copy(), d.__class__))
+        self.assertTrue(isinstance(d.copy(), d.__class__))
         self.assertRaises(TypeError, d.copy, None)
 
     def test_pop(self):
