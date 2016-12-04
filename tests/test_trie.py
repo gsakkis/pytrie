@@ -80,6 +80,27 @@ class TestTrie(unittest.TestCase):
                 list(zip(t.keys(prefix), t.values(prefix)))
             )
 
+    def test_empty_string(self):
+        self.trie[''] = '!'
+
+        self.assertEqual(self.trie.keys(''),
+                         ['', 'all', 'allot', 'alloy', 'aloe', 'an', 'ant',
+                          'are', 'ate', 'be'])
+        self.assertEqual(self.trie.values(''),
+                         ['!', 2, 3, 4, 5, 0, 1, 6, 7, 8])
+        self.assertEqual(self.trie.items(''),
+                         [('', '!'), ('all', 2), ('allot', 3), ('alloy', 4),
+                          ('aloe', 5), ('an', 0), ('ant', 1), ('are', 6),
+                          ('ate', 7), ('be', 8)])
+
+        self.assertEqual(list(self.trie.iter_prefixes('foo')), [''])
+        self.assertEqual(list(self.trie.iter_prefix_values('foo')), ['!'])
+        self.assertEqual(list(self.trie.iter_prefix_items('foo')), [('', '!')])
+
+        self.assertEqual(self.trie.longest_prefix('foo'), '')
+        self.assertEqual(self.trie.longest_prefix_value('foo'), '!')
+        self.assertEqual(self.trie.longest_prefix_item('foo'), ('', '!'))
+
     def test_pickle(self):
         from pickle import dumps, loads, HIGHEST_PROTOCOL
         for proto in range(HIGHEST_PROTOCOL):

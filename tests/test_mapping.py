@@ -109,7 +109,7 @@ class TestMappingTrie(BasicTestMappingTrie, mapping_tests.TestMappingProtocol):
         self.assertEqual(self.type2test.fromkeys('abc'),
                          {'a': None, 'b': None, 'c': None})
         d = self._empty_mapping()
-        self.assertTrue(not(d.fromkeys('abc') is d))
+        self.assertTrue(d.fromkeys('abc') is not d)
         self.assertEqual(d.fromkeys('abc'), {'a': None, 'b': None, 'c': None})
         self.assertEqual(d.fromkeys(('4', '5'), 0), {'4': 0, '5': 0})
         self.assertEqual(d.fromkeys([]), {})

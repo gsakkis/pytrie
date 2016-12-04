@@ -133,7 +133,6 @@ class Trie(MutableMapping):
         Parameters are the same with ``dict()``.
         """
         self._root = self.NodeFactory()
-
         self.update(*args, **kwargs)
 
     @classmethod
@@ -173,13 +172,13 @@ class Trie(MutableMapping):
           - if ``default`` is given, return it
           - otherwise raise ``KeyError``
         """
-        current = self._root
-        longest_prefix_value = NULL
+        node = self._root
+        longest_prefix_value = node.value
         for part in key:
-            current = current.children.get(part)
-            if current is None:
+            node = node.children.get(part)
+            if node is None:
                 break
-            value = current.value
+            value = node.value
             if value is not NULL:
                 longest_prefix_value = value
         if longest_prefix_value is not NULL:
@@ -199,15 +198,15 @@ class Trie(MutableMapping):
         """
         prefix = []
         append = prefix.append
-        current = self._root
-        longest_prefix_value = NULL
+        node = self._root
+        longest_prefix_value = node.value
         max_non_null_index = -1
         for i, part in enumerate(key):
-            current = current.children.get(part)
-            if current is None:
+            node = node.children.get(part)
+            if node is None:
                 break
             append(part)
-            value = current.value
+            value = node.value
             if value is not NULL:
                 longest_prefix_value = value
                 max_non_null_index = i
@@ -228,6 +227,8 @@ class Trie(MutableMapping):
         prefix = []
         append = prefix.append
         node = self._root
+        if node.value is not NULL:
+            yield key_factory(prefix)
         for part in key:
             node = node.children.get(part)
             if node is None:
@@ -241,6 +242,8 @@ class Trie(MutableMapping):
         with keys that are prefixes of ``key``.
         """
         node = self._root
+        if node.value is not NULL:
+            yield node.value
         for part in key:
             node = node.children.get(part)
             if node is None:
@@ -256,6 +259,8 @@ class Trie(MutableMapping):
         prefix = []
         append = prefix.append
         node = self._root
+        if node.value is not NULL:
+            yield (key_factory(prefix), node.value)
         for part in key:
             node = node.children.get(part)
             if node is None:
