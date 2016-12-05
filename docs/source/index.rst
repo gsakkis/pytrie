@@ -49,11 +49,13 @@ Original mapping API methods
 The following methods have the standard mapping signature and semantics.
 
 .. automethod:: Trie.__len__
+.. automethod:: Trie.__nonzero__
 .. automethod:: Trie.__iter__
 .. automethod:: Trie.__contains__
 .. automethod:: Trie.__getitem__
 .. automethod:: Trie.__setitem__
 .. automethod:: Trie.__delitem__
+.. automethod:: Trie.__cmp__
 .. automethod:: Trie.__repr__
 .. automethod:: Trie.clear
 .. automethod:: Trie.copy

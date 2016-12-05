@@ -449,14 +449,6 @@ class _SortedNode(Node):
 class SortedTrie(Trie):
     """
     A :class:`Trie` that returns its keys (and associated values/items) sorted.
-
-    .. note::
-    This implementation does not keep the keys sorted internally; instead it
-    sorts them every time a method returning a list or iterator (e.g.
-    :meth:`keys`) is called. In cases where a trie is relatively stable
-    (few inserts/deletes) and is iterated often, it is probably more efficient
-    to use a :attr:`NodeFactory` based on a sorted dict such as
-    `sorteddict <http://pypi.python.org/pypi/sorteddict/>`_.
     """
     NodeFactory = _SortedNode
 
