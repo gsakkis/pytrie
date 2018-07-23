@@ -59,10 +59,16 @@ if PY3:
         return d.items()
 else:
     def itervalues(d):  # pylint: disable=invalid-name
-        return d.itervalues()
+        if hasattr(d, 'itervalues'):
+            return d.itervalues()
+
+        return d.values()
 
     def iteritems(d):  # pylint: disable=invalid-name
-        return d.iteritems()
+        if hasattr(d, 'iteritems'):
+            return d.iteritems()
+
+        return d.items()
 
 
 # Singleton sentinel - works with pickling
