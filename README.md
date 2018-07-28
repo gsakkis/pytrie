@@ -15,6 +15,10 @@ Documentation is available at [Read the Docs](https://pytrie.readthedocs.io/).
 
 ## Changelog
 
+### 0.3.1
+
+* Fixed iteritems/itervalues for SortedDicts in Python 2.7.
+
 ### 0.3
 
 * Fixed bug for tries with zero-length keys.

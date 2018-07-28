@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='PyTrie',
-    version='0.3',
+    version='0.3.1',
     author='George Sakkis',
     author_email='george.sakkis@gmail.com',
     url='https://github.com/gsakkis/pytrie/',
