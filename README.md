@@ -1,19 +1,23 @@
 # pytrie
 
-`pytrie` is a a pure Python (2 and 3) implementation of the trie data structure.
+`pytrie` is a a pure Python 3 implementation of the trie data structure.
 
 A _trie_ is an ordered tree data structure that is used to store a mapping
 where the keys are sequences, usually strings over an alphabet. In addition to
 implementing the mapping interface, tries allow finding the items for a given
 prefix, and vice versa, finding the items whose keys are prefixes of a given key.
 
-`pytrie` runs on Python 2.7 and 3.x without modification. To install run:
+To install run:
 
     pip install pytrie
 
 Documentation is available at [Read the Docs](https://pytrie.readthedocs.io/).
 
 ## Changelog
+
+### 0.4.0
+
+* Drop Python 2 support
 
 ### 0.3.1
 
