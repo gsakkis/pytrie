@@ -45,20 +45,9 @@ __all__ = ['Trie', 'StringTrie', 'SortedTrie', 'SortedStringTrie', 'Node']
 
 import sys
 from copy import copy
-try:
-    from collections.abc import MutableMapping
-except ImportError:
-    from collections import MutableMapping
+from collections.abc import MutableMapping
 
 import sortedcontainers
-
-# Python 3 interoperability
-PY3 = sys.version_info[0] == 3
-def itervalues(d):  # pylint: disable=invalid-name
-    return d.values()
-
-def iteritems(d):  # pylint: disable=invalid-name
-    return d.items()
 
 
 # Singleton sentinel - works with pickling
@@ -89,17 +78,17 @@ class Node(object):
     def numkeys(self):
         """Return the number of keys in the subtree rooted at this node."""
         return (int(self.value is not NULL) +
-                sum(child.numkeys() for child in itervalues(self.children)))
+                sum(child.numkeys() for child in self.children.values()))
 
     def __repr__(self):
         return '(%s, {%s})' % (
             self.value is NULL and 'NULL' or repr(self.value),
-            ', '.join('%r: %r' % t for t in iteritems(self.children)))
+            ', '.join('%r: %r' % t for t in self.children.items()))
 
     def __copy__(self):
         clone = self.__class__(self.value)
         clone_children = clone.children
-        for key, child in iteritems(self.children):
+        for key, child in self.children.items():
             clone_children[key] = child.__copy__()
         return clone
 
@@ -308,7 +297,7 @@ class Trie(MutableMapping):
         def generator(node, null=NULL):
             if node.value is not null:
                 yield node.value
-            for child in itervalues(node.children):
+            for child in node.children.values():
                 for subresult in generator(child):
                     yield subresult
         if prefix is None:
@@ -333,7 +322,7 @@ class Trie(MutableMapping):
                       append=append, null=NULL):
             if node.value is not null:
                 yield (key_factory(parts), node.value)
-            for part, child in iteritems(node.children):
+            for part, child in node.children.items():
                 append(part)
                 for subresult in generator(child):
                     yield subresult
@@ -357,12 +346,8 @@ class Trie(MutableMapping):
     def __len__(self):
         return self._root.numkeys()
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self._root.value is not NULL or bool(self._root.children)
-
-    if PY3:
-        __bool__ = __nonzero__
-        del __nonzero__
 
     def __iter__(self):
         return self.iterkeys()
