@@ -75,10 +75,9 @@ class Node:
         self.value = value
         self.children = self.ChildrenFactory()
 
-    def numkeys(self):
+    def __len__(self):
         """Return the number of keys in the subtree rooted at this node."""
-        return (int(self.value is not NULL) +
-                sum(child.numkeys() for child in self.children.values()))
+        return int(self.value is not NULL) + sum(map(len, self.children.values()))
 
     def __repr__(self):
         return '(%s, {%s})' % (
@@ -344,7 +343,7 @@ class Trie(MutableMapping):
     #----- original mapping API methods ----------------------------------------
 
     def __len__(self):
-        return self._root.numkeys()
+        return len(self._root)
 
     def __bool__(self):
         return self._root.value is not NULL or bool(self._root.children)
