@@ -51,11 +51,11 @@ import sortedcontainers
 
 
 # Singleton sentinel - works with pickling
-class NULL(object):
+class NULL:
     pass
 
 
-class Node(object):
+class Node:
     """Trie node class.
 
     Subclasses may extend it to replace :attr:`ChildrenFactory` with a different
@@ -356,9 +356,6 @@ class Trie(MutableMapping):
         node = self._find(key)
         return node is not None and node.value is not NULL
 
-    def has_key(self, key):
-        return key in self
-
     def __getitem__(self, key):
         node = self._find(key)
         if node is None or node.value is NULL:
@@ -405,9 +402,6 @@ class Trie(MutableMapping):
         return '%s({%s})' % (
             self.__class__.__name__,
             ', '.join('%r: %r' % t for t in self.iteritems()))
-
-    def __cmp__(self, other):
-        return cmp(self.items(), other.items())
 
     def _find(self, key):
         node = self._root
