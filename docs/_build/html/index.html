@@ -1,0 +1,470 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Welcome to PyTrie’s documentation! &#8212; PyTrie 0.4.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-pytrie-s-documentation">
+<h1>Welcome to PyTrie’s documentation!<a class="headerlink" href="#welcome-to-pytrie-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<span class="target" id="module-pytrie"></span><p><a class="reference internal" href="#module-pytrie" title="pytrie"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pytrie</span></code></a> is a pure Python implementation of the
+<a class="reference external" href="http://en.wikipedia.org/wiki/Trie">trie</a> (prefix tree) data structure.</p>
+<p>A <em>trie</em> is a tree data structure that is used to store a mapping where the keys
+are sequences, usually strings over an alphabet. In addition to implementing the
+mapping interface, tries facilitate finding the items for a given prefix, and
+vice versa, finding the items whose keys are prefixes of a given key <code class="docutils literal notranslate"><span class="pre">K</span></code>. As a
+common special case, finding the longest-prefix item is also supported.</p>
+<p>Algorithmically, tries are more efficient than binary search trees (BSTs) both
+in lookup time and memory when they contain many keys sharing relatively few
+prefixes. Unlike hash tables, trie keys don’t need to be hashable. In the
+current implementation, a key can be any finite iterable with hashable elements.</p>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pytrie</span> <span class="kn">import</span> <span class="n">SortedStringTrie</span> <span class="k">as</span> <span class="n">Trie</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Trie</span><span class="p">(</span><span class="n">an</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ant</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">all</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">allot</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">alloy</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">aloe</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">are</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">be</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">SortedStringTrie({&#39;all&#39;: 2, &#39;allot&#39;: 3, &#39;alloy&#39;: 4, &#39;aloe&#39;: 5, &#39;an&#39;: 0, &#39;ant&#39;: 1, &#39;are&#39;: 6, &#39;be&#39;: 7})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;al&#39;</span><span class="p">)</span>
+<span class="go">[&#39;all&#39;, &#39;allot&#39;, &#39;alloy&#39;, &#39;aloe&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;an&#39;</span><span class="p">)</span>
+<span class="go">[(&#39;an&#39;, 0), (&#39;ant&#39;, 1)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">longest_prefix</span><span class="p">(</span><span class="s1">&#39;antonym&#39;</span><span class="p">)</span>
+<span class="go">&#39;ant&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">longest_prefix_item</span><span class="p">(</span><span class="s1">&#39;allstar&#39;</span><span class="p">)</span>
+<span class="go">(&#39;all&#39;, 2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">longest_prefix_value</span><span class="p">(</span><span class="s1">&#39;area&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;N/A&#39;</span><span class="p">)</span>
+<span class="go">6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">longest_prefix</span><span class="p">(</span><span class="s1">&#39;alsa&#39;</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+    <span class="o">...</span>
+<span class="gr">KeyError</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">longest_prefix_value</span><span class="p">(</span><span class="s1">&#39;alsa&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">-1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">iter_prefixes</span><span class="p">(</span><span class="s1">&#39;allotment&#39;</span><span class="p">))</span>
+<span class="go">[&#39;all&#39;, &#39;allot&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">iter_prefix_items</span><span class="p">(</span><span class="s1">&#39;antonym&#39;</span><span class="p">))</span>
+<span class="go">[(&#39;an&#39;, 0), (&#39;ant&#39;, 1)]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="reference-documentation">
+<h2>Reference documentation<a class="headerlink" href="#reference-documentation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pytrie.Trie">
+<em class="property">class </em><code class="descclassname">pytrie.</code><code class="descname">Trie</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.MutableMapping</span></code></p>
+<p>Base trie class.</p>
+<p>As with regular dicts, keys are not necessarily returned sorted. Use
+<a class="reference internal" href="#pytrie.SortedTrie" title="pytrie.SortedTrie"><code class="xref py py-class docutils literal notranslate"><span class="pre">SortedTrie</span></code></a> if sorting is required.</p>
+<dl class="attribute">
+<dt id="pytrie.Trie.KeyFactory">
+<code class="descname">KeyFactory</code><a class="headerlink" href="#pytrie.Trie.KeyFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">builtins.tuple</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pytrie.Trie.NodeFactory">
+<code class="descname">NodeFactory</code><a class="headerlink" href="#pytrie.Trie.NodeFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callable for creating new trie nodes.</p>
+<p>alias of <a class="reference internal" href="#pytrie.Node" title="pytrie.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new trie.</p>
+<p>Parameters are the same with <code class="docutils literal notranslate"><span class="pre">dict()</span></code>.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="pytrie.Trie.fromkeys">
+<em class="property">classmethod </em><code class="descname">fromkeys</code><span class="sig-paren">(</span><em>iterable</em>, <em>value=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.fromkeys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new trie with keys from <code class="docutils literal notranslate"><span class="pre">iterable</span></code> and values set to
+<code class="docutils literal notranslate"><span class="pre">value</span></code>.</p>
+<p>Parameters are the same with <code class="docutils literal notranslate"><span class="pre">dict.fromkeys()</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pytrie.StringTrie">
+<em class="property">class </em><code class="descclassname">pytrie.</code><code class="descname">StringTrie</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.StringTrie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pytrie.Trie" title="pytrie.Trie"><code class="xref py py-class docutils literal notranslate"><span class="pre">pytrie.Trie</span></code></a></p>
+<p>A more appropriate for string keys <a class="reference internal" href="#pytrie.Trie" title="pytrie.Trie"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trie</span></code></a>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pytrie.SortedTrie">
+<em class="property">class </em><code class="descclassname">pytrie.</code><code class="descname">SortedTrie</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.SortedTrie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pytrie.Trie" title="pytrie.Trie"><code class="xref py py-class docutils literal notranslate"><span class="pre">pytrie.Trie</span></code></a></p>
+<p>A <a class="reference internal" href="#pytrie.Trie" title="pytrie.Trie"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trie</span></code></a> that returns its keys (and associated values/items) sorted.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pytrie.SortedStringTrie">
+<em class="property">class </em><code class="descclassname">pytrie.</code><code class="descname">SortedStringTrie</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.SortedStringTrie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pytrie.SortedTrie" title="pytrie.SortedTrie"><code class="xref py py-class docutils literal notranslate"><span class="pre">pytrie.SortedTrie</span></code></a>, <a class="reference internal" href="#pytrie.StringTrie" title="pytrie.StringTrie"><code class="xref py py-class docutils literal notranslate"><span class="pre">pytrie.StringTrie</span></code></a></p>
+<p>A <a class="reference internal" href="#pytrie.Trie" title="pytrie.Trie"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trie</span></code></a> that is both a <a class="reference internal" href="#pytrie.StringTrie" title="pytrie.StringTrie"><code class="xref py py-class docutils literal notranslate"><span class="pre">StringTrie</span></code></a> and a <a class="reference internal" href="#pytrie.SortedTrie" title="pytrie.SortedTrie"><code class="xref py py-class docutils literal notranslate"><span class="pre">SortedTrie</span></code></a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="trie-methods">
+<h3>Trie methods<a class="headerlink" href="#trie-methods" title="Permalink to this headline">¶</a></h3>
+<p>The following methods are specific to tries; they are not part of the mapping API.</p>
+<dl class="method">
+<dt id="pytrie.Trie.longest_prefix">
+<code class="descclassname">Trie.</code><code class="descname">longest_prefix</code><span class="sig-paren">(</span><em>key</em><span class="optional">[</span>, <em>default</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.longest_prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the longest key in this trie that is a prefix of <code class="docutils literal notranslate"><span class="pre">key</span></code>.</p>
+<dl class="docutils">
+<dt>If the trie doesn’t contain any prefix of <code class="docutils literal notranslate"><span class="pre">key</span></code>:</dt>
+<dd><ul class="first last simple">
+<li>if <code class="docutils literal notranslate"><span class="pre">default</span></code> is given, return it</li>
+<li>otherwise raise <code class="docutils literal notranslate"><span class="pre">KeyError</span></code></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.longest_prefix_value">
+<code class="descclassname">Trie.</code><code class="descname">longest_prefix_value</code><span class="sig-paren">(</span><em>key</em><span class="optional">[</span>, <em>default</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.longest_prefix_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value associated with the longest key in this trie that is
+a prefix of <code class="docutils literal notranslate"><span class="pre">key</span></code>.</p>
+<dl class="docutils">
+<dt>If the trie doesn’t contain any prefix of <code class="docutils literal notranslate"><span class="pre">key</span></code>:</dt>
+<dd><ul class="first last simple">
+<li>if <code class="docutils literal notranslate"><span class="pre">default</span></code> is given, return it</li>
+<li>otherwise raise <code class="docutils literal notranslate"><span class="pre">KeyError</span></code></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.longest_prefix_item">
+<code class="descclassname">Trie.</code><code class="descname">longest_prefix_item</code><span class="sig-paren">(</span><em>key</em><span class="optional">[</span>, <em>default</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.longest_prefix_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the item (<code class="docutils literal notranslate"><span class="pre">(key,value)</span></code> tuple) associated with the longest
+key in this trie that is a prefix of <code class="docutils literal notranslate"><span class="pre">key</span></code>.</p>
+<dl class="docutils">
+<dt>If the trie doesn’t contain any prefix of <code class="docutils literal notranslate"><span class="pre">key</span></code>:</dt>
+<dd><ul class="first last simple">
+<li>if <code class="docutils literal notranslate"><span class="pre">default</span></code> is given, return it</li>
+<li>otherwise raise <code class="docutils literal notranslate"><span class="pre">KeyError</span></code></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.iter_prefixes">
+<code class="descclassname">Trie.</code><code class="descname">iter_prefixes</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.iter_prefixes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator over the keys of this trie that are prefixes of
+<code class="docutils literal notranslate"><span class="pre">key</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.iter_prefix_values">
+<code class="descclassname">Trie.</code><code class="descname">iter_prefix_values</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.iter_prefix_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator over the values of this trie that are associated
+with keys that are prefixes of <code class="docutils literal notranslate"><span class="pre">key</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.iter_prefix_items">
+<code class="descclassname">Trie.</code><code class="descname">iter_prefix_items</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.iter_prefix_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator over the items (<code class="docutils literal notranslate"><span class="pre">(key,value)</span></code> tuples) of this
+trie that are associated with keys that are prefixes of <code class="docutils literal notranslate"><span class="pre">key</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="extended-mapping-api-methods">
+<h3>Extended mapping API methods<a class="headerlink" href="#extended-mapping-api-methods" title="Permalink to this headline">¶</a></h3>
+<p>The following methods extend the respective mapping API methods with an optional
+<code class="docutils literal notranslate"><span class="pre">prefix</span></code> parameter. If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, only keys (or associated values/items)
+that start with <code class="docutils literal notranslate"><span class="pre">prefix</span></code> are returned.</p>
+<dl class="method">
+<dt id="pytrie.Trie.keys">
+<code class="descclassname">Trie.</code><code class="descname">keys</code><span class="sig-paren">(</span><em>prefix=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of this trie’s keys.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>prefix</strong> – If not None, return only the keys prefixed by <code class="docutils literal notranslate"><span class="pre">prefix</span></code>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.values">
+<code class="descclassname">Trie.</code><code class="descname">values</code><span class="sig-paren">(</span><em>prefix=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of this trie’s values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>prefix</strong> – If not None, return only the values associated with keys
+prefixed by <code class="docutils literal notranslate"><span class="pre">prefix</span></code>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.items">
+<code class="descclassname">Trie.</code><code class="descname">items</code><span class="sig-paren">(</span><em>prefix=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of this trie’s items (<code class="docutils literal notranslate"><span class="pre">(key,value)</span></code> tuples).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>prefix</strong> – If not None, return only the items associated with keys
+prefixed by <code class="docutils literal notranslate"><span class="pre">prefix</span></code>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.iterkeys">
+<code class="descclassname">Trie.</code><code class="descname">iterkeys</code><span class="sig-paren">(</span><em>prefix=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.iterkeys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator over this trie’s keys.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>prefix</strong> – If not None, yield only the keys prefixed by <code class="docutils literal notranslate"><span class="pre">prefix</span></code>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.itervalues">
+<code class="descclassname">Trie.</code><code class="descname">itervalues</code><span class="sig-paren">(</span><em>prefix=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.itervalues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator over this trie’s values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>prefix</strong> – If not None, yield only the values associated with keys
+prefixed by <code class="docutils literal notranslate"><span class="pre">prefix</span></code>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.iteritems">
+<code class="descclassname">Trie.</code><code class="descname">iteritems</code><span class="sig-paren">(</span><em>prefix=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.iteritems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator over this trie’s items (<code class="docutils literal notranslate"><span class="pre">(key,value)</span></code> tuples).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>prefix</strong> – If not None, yield only the items associated with keys
+prefixed by <code class="docutils literal notranslate"><span class="pre">prefix</span></code>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="original-mapping-api-methods">
+<h3>Original mapping API methods<a class="headerlink" href="#original-mapping-api-methods" title="Permalink to this headline">¶</a></h3>
+<p>The following methods have the standard mapping signature and semantics.</p>
+<dl class="method">
+<dt id="pytrie.Trie.__len__">
+<code class="descclassname">Trie.</code><code class="descname">__len__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.__len__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.__bool__">
+<code class="descclassname">Trie.</code><code class="descname">__bool__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.__bool__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.__iter__">
+<code class="descclassname">Trie.</code><code class="descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.__iter__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.__contains__">
+<code class="descclassname">Trie.</code><code class="descname">__contains__</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.__contains__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.__getitem__">
+<code class="descclassname">Trie.</code><code class="descname">__getitem__</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.__setitem__">
+<code class="descclassname">Trie.</code><code class="descname">__setitem__</code><span class="sig-paren">(</span><em>key</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.__setitem__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.__delitem__">
+<code class="descclassname">Trie.</code><code class="descname">__delitem__</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.__delitem__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.__repr__">
+<code class="descclassname">Trie.</code><code class="descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.clear">
+<code class="descclassname">Trie.</code><code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None.  Remove all items from D.<a class="headerlink" href="#pytrie.Trie.clear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pytrie.Trie.copy">
+<code class="descclassname">Trie.</code><code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Trie.copy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="internals">
+<h3>Internals<a class="headerlink" href="#internals" title="Permalink to this headline">¶</a></h3>
+<p>Tries are implemented as trees of <a class="reference internal" href="#pytrie.Node" title="pytrie.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a> instances. You don’t need to
+worry about them unless unless you want to extend or replace <a class="reference internal" href="#pytrie.Node" title="pytrie.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a> with
+a new node factory and bind it to <a class="reference internal" href="#pytrie.Trie.NodeFactory" title="pytrie.Trie.NodeFactory"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Trie.NodeFactory</span></code></a>.</p>
+<dl class="class">
+<dt id="pytrie.Node">
+<em class="property">class </em><code class="descclassname">pytrie.</code><code class="descname">Node</code><span class="sig-paren">(</span><em>value=&lt;class 'pytrie.NULL'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pytrie.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Trie node class.</p>
+<p>Subclasses may extend it to replace <a class="reference internal" href="#pytrie.Node.ChildrenFactory" title="pytrie.Node.ChildrenFactory"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ChildrenFactory</span></code></a> with a different
+mapping class (e.g. <a class="reference external" href="http://pypi.python.org/pypi/sorteddict/">sorteddict</a>)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>value</strong> – The value of the key corresponding to this node or
+<code class="xref py py-const docutils literal notranslate"><span class="pre">NULL</span></code> if there is no such key.</li>
+<li><strong>children</strong> – A <code class="docutils literal notranslate"><span class="pre">{key-part</span> <span class="pre">:</span> <span class="pre">child-node}</span></code> mapping.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="pytrie.Node.ChildrenFactory">
+<code class="descname">ChildrenFactory</code><a class="headerlink" href="#pytrie.Node.ChildrenFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">builtins.dict</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">PyTrie</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, George Sakkis.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
