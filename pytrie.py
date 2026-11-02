@@ -390,6 +390,7 @@ class Trie(MutableMapping):
             del node.children[part]
 
     def clear(self):
+        self._root.value = NULL
         self._root.children.clear()
 
     def copy(self):
